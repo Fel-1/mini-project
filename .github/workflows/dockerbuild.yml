@@ -96,7 +96,7 @@ jobs:
             docker rmi felz28/mini-project:latest felz28/mini-project:latest
             docker pull felz28/mini-project:latest
             docker pull felz28/mini-project-coverage:latest
-            docker run -d --rm --name mini-project-coverage -p 443:80 felz28/mini-project-coverage:latest
+            docker run -d --rm --name mini-project-coverage -p 8000:80 felz28/mini-project-coverage:latest
             docker run -d --rm --name mini-project -p 80:8080 --env-file dev.env --network alterra felz28/mini-project:latest
 
 
