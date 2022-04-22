@@ -1,0 +1,103 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: 
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  run_test:
+    name: Unit Test
+    runs-on: ubuntu-18.04
+    steps:
+      - run: echo "Starting execute unit test"
+      - uses: actions/checkout@v3
+      - name: Setup JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: 'adopt'
+      - name: Maven Verify
+        run: mvn clean verify
+      - name: Dockerhub Login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./unit-test.dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/mini-project-coverage:latest
+  build:
+    name: Build
+    runs-on: ubuntu-18.04
+    needs: run_test
+    steps:
+      - run: echo "Starting execute unit test"
+      - uses: actions/checkout@v3
+      - name: Setup JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: 'adopt'
+      - name: Maven Build
+        run: mvn clean package -Dmaven.test.skip=true
+      - name: Dockerhub Login
+        uses: docker/login-action@v1
+        with: 
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/mini-project:latest
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-18.04
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - name: copy file via ssh key
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "./dev.env"
+          target: "/home/ec2-user"
+      - name: Deploy with SSH
+        uses: appleboy/ssh-action@master
+        with: 
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            docker stop mini-project mini-project-coverage
+            docker rmi felz28/mini-project:latest felz28/mini-project:latest
+            docker pull felz28/mini-project:latest
+            docker pull felz28/mini-project-coverage:latest
+            docker run -d --rm --name mini-project-coverage -p 443:80 felz28/mini-project-coverage:latest
+            docker run -d --rm --name mini-project -p 80:8080 --env-file dev.env --network alterra felz28/mini-project:latest
+
+
+      
