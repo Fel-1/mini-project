@@ -1,4 +1,4 @@
-package com.alterra.miniproject.domain.base;
+package com.alterra.miniproject.domain.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,8 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 
 @Data
 @SuperBuilder
@@ -17,4 +19,14 @@ public abstract class BaseDAO {
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
+
+    @PrePersist
+    void onCreate() {
+        this.isDeleted = Boolean.FALSE;
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        this.isDeleted = Boolean.FALSE;
+    }
 }

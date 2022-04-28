@@ -1,6 +1,6 @@
 package com.alterra.miniproject.domain.dao;
 
-import com.alterra.miniproject.domain.base.BaseDAO;
+import com.alterra.miniproject.domain.common.BaseDAO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +20,7 @@ import javax.persistence.*;
 @Table(name = "M_FACILITY_TYPE")
 @SQLDelete(sql = "UPDATE M_FACILITY_TYPE SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
-public class FacilityTypeDAO extends BaseDAO {
+public class FacilityType extends BaseDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

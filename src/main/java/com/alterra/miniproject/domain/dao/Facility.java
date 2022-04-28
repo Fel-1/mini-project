@@ -1,6 +1,6 @@
 package com.alterra.miniproject.domain.dao;
 
-import com.alterra.miniproject.domain.base.BaseDAO;
+import com.alterra.miniproject.domain.common.BaseDAO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,10 +17,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "M_DOCTOR")
-@SQLDelete(sql = "UPDATE M_DOCTOR SET is_deleted = true WHERE id = ?")
+@Table(name = "M_FACILITY")
+@SQLDelete(sql = "UPDATE M_FACILITY SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
-public class DoctorDAO extends BaseDAO {
+public class Facility extends BaseDAO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,16 +29,21 @@ public class DoctorDAO extends BaseDAO {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "age")
-    private Integer age;
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private FacilityType facilityType;
 
-    @Column(name = "gender")
-    private Character gender;
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
 
-    @Column(name = "speciality")
-    private String speciality;
+    @Column(name = "address")
+    private String address;
 
-    @Column(name = "experience")
-    private Integer experience;
+    @Column(name = "map_url")
+    private String mapUrl;
+
+    @Column(name = "website_url")
+    private String websiteUrl;
 
 }
