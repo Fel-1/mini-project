@@ -25,9 +25,7 @@ public class UserService implements UserDetailsService {
 
         if(userOptional.isEmpty()) {
             throw new UsernameNotFoundException("username not found");
-        } else {
-            return userOptional.get();
         }
-
+        return userOptional.get();
     }
 }

@@ -1,4 +1,4 @@
-package com.alterra.miniproject.security;
+package com.alterra.miniproject.config.security;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

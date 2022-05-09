@@ -114,7 +114,8 @@
 						<exclude>**/repository/*</exclude>
 						<exclude>**/constant/*</exclude>
 						<exclude>**/MiniProjectApplication.class</exclude>
-						<exclude>**/config/*</exclude>
+						<exclude>**/config/**</exclude>
+						<exclude>**/controller/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>

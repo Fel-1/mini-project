@@ -1,6 +1,6 @@
 package com.alterra.miniproject.config;
 
-import com.alterra.miniproject.security.SecurityFilter;
+import com.alterra.miniproject.config.security.SecurityFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

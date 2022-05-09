@@ -1,4 +1,4 @@
-package com.alterra.miniproject.security;
+package com.alterra.miniproject.config.security;
 
 import com.alterra.miniproject.domain.dao.User;
 import io.jsonwebtoken.*;
