@@ -8,7 +8,8 @@ public class AppConstant {
 
         SUCCESS("SUCCESS", "Success!"),
         DATA_NOT_FOUND("DATA_NOT_FOUND", "Data not found!"),
-        UNKNOWN_ERROR("UNKNOWN_ERROR", "Happened unknown error!");
+        UNKNOWN_ERROR("UNKNOWN_ERROR", "Happened unknown error!"),
+        BAD_CREDENTIALS("BAD_CREDENTIALS", "Provided Credentials is bad!");
 
         private final String code;
         private final String message;
