@@ -89,7 +89,7 @@ class FacilityTypeServiceTest {
         when(modelMapper.map(any(),eq(FacilityTypeDTO.class))).thenReturn(facilityTypeDTO);
         when(facilityTypeRepository.save(any())).thenReturn(facilityType);
 
-        ResponseEntity responseEntity = facilityTypeService.addNew(facilityTypeDTO);
+        ResponseEntity responseEntity = facilityTypeService.addNew(facilityTypeDTO, null);
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -103,7 +103,7 @@ class FacilityTypeServiceTest {
         ResponseEntity<Object> responseEntity = facilityTypeService.addNew(FacilityTypeDTO
                 .builder()
                 .id(1L)
-                .build());
+                .build(), null);
 
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
         assertEquals(AppConstant.ResponseCode.UNKNOWN_ERROR.getCode(), apiResponse.getStatus().getCode());

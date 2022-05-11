@@ -6,16 +6,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.time.DayOfWeek;
+import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FacilityTypeDTO {
+public class DoctorDetailDTO implements Serializable {
 
-    private Long id;
+    private static final long serialVersionUID = -7188902159788748381L;
 
-    private String type;
-
+    private DoctorDTO doctor;
+    private FacilityDTO facility;
+    private Set<DayOfWeek> workDays;
 }

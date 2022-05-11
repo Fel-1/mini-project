@@ -44,11 +44,11 @@ public class LocationService {
         }
     }
 
-    public ResponseEntity<Object> addNew(LocationDTO request) {
+    public ResponseEntity<Object> addNew(LocationDTO request, String username) {
         log.info("Executing add new location");
         try {
             Location location = modelMapper.map(request, Location.class);
-            log.debug(location.toString());
+            location.setCreatedBy(username);
             locationRepository.save(location);
 
             log.info("Successfully added new Location");
@@ -70,8 +70,11 @@ public class LocationService {
             }
 
             optionalLocation.ifPresent(location -> {
-                location = modelMapper.map(request, Location.class);
                 location.setId(id);
+                location.setKelurahan(request.getKelurahan());
+                location.setKecamatan(request.getKecamatan());
+                location.setKota(request.getKota());
+                location.setProvinsi(request.getProvinsi());
                 locationRepository.save(location);
             });
 

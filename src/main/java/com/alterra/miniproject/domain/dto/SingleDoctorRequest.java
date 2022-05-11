@@ -6,16 +6,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FacilityTypeDTO {
+public class SingleDoctorRequest {
 
     private Long id;
 
-    private String type;
+    private String name;
+
+    private Integer age;
+
+    private Character gender;
+
+    private String speciality;
+
+    private Integer experience;
+
+    private List<DoctorDetailDTO> details;
 
 }

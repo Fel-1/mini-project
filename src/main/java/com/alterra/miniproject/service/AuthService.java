@@ -42,7 +42,7 @@ public class AuthService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ResponseEntity<Object> register(UserPassword req) {
+    public ResponseEntity<Object> register(UserPassword req, String username) {
         log.info("Executing register new user");
         Optional<User> userOptional = userRepository.getDistinctTopByUsername(req.getUsername());
 
@@ -59,6 +59,7 @@ public class AuthService {
         User user = new User();
         user.setUsername(req.getUsername());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setCreatedBy(username);
         userRepository.save(user);
         log.info("User doesnt exist yet, creating new user");
         return ResponseUtil.build(
