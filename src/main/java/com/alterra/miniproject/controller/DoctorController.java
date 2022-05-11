@@ -2,6 +2,9 @@ package com.alterra.miniproject.controller;
 
 import com.alterra.miniproject.domain.dto.DoctorDTO;
 import com.alterra.miniproject.service.DoctorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +17,7 @@ public class DoctorController {
     private DoctorService doctorService;
 
     @GetMapping("")
+    @SecurityRequirements
     public ResponseEntity<Object> getAllDoctor() {
         return doctorService.getAll();
     }
@@ -29,6 +33,7 @@ public class DoctorController {
     }
 
     @DeleteMapping("/auth")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Object> deleteDoctor(@RequestParam(value = "id") Long id) {
         return doctorService.deleteById(id);
     }
