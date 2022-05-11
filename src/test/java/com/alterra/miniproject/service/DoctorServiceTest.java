@@ -85,7 +85,7 @@ class DoctorServiceTest {
         when(modelMapper.map(any(),eq(DoctorDTO.class))).thenReturn(doctorDTO);
         when(doctorRepository.save(any())).thenReturn(doctor);
 
-        ResponseEntity responseEntity = doctorService.addNew(doctorDTO);
+        ResponseEntity responseEntity = doctorService.addNew(doctorDTO, null);
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -99,7 +99,7 @@ class DoctorServiceTest {
         ResponseEntity<Object> responseEntity = doctorService.addNew(DoctorDTO
                 .builder()
                 .id(1L)
-                .build());
+                .build(), null);
 
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
         assertEquals(AppConstant.ResponseCode.UNKNOWN_ERROR.getCode(), apiResponse.getStatus().getCode());

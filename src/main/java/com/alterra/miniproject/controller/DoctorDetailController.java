@@ -1,13 +1,13 @@
 package com.alterra.miniproject.controller;
 
-import com.alterra.miniproject.domain.dto.DoctorDTO;
 import com.alterra.miniproject.domain.dto.DoctorDetailDTO;
 import com.alterra.miniproject.service.DoctorDetailService;
-import com.alterra.miniproject.service.DoctorService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/doctor/detail")
@@ -22,7 +22,11 @@ public class DoctorDetailController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<Object> createNewDoctor(@RequestBody DoctorDetailDTO request) {
-        return doctorDetailService.addNewDetail(request);
+    public ResponseEntity<Object> createNewDoctor(@RequestBody DoctorDetailDTO request, Principal principal) {
+        if(principal!=null){
+            return doctorDetailService.addNewDetail(request, principal.getName());
+        }
+        return doctorDetailService.addNewDetail(request, null);
+
     }
 }

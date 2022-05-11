@@ -86,7 +86,7 @@ class LocationServiceTest {
         when(modelMapper.map(any(),eq(LocationDTO.class))).thenReturn(locationDTO);
         when(locationRepository.save(any())).thenReturn(location);
 
-        ResponseEntity responseEntity = locationService.addNew(locationDTO);
+        ResponseEntity responseEntity = locationService.addNew(locationDTO, null);
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -100,7 +100,7 @@ class LocationServiceTest {
         ResponseEntity<Object> responseEntity = locationService.addNew(LocationDTO
                 .builder()
                 .id(1L)
-                .build());
+                .build(), null);
 
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
         assertEquals(AppConstant.ResponseCode.UNKNOWN_ERROR.getCode(), apiResponse.getStatus().getCode());

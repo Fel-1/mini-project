@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DoctorDTO {
 
-
     private Long id;
 
     private String name;

@@ -53,7 +53,7 @@ public class DoctorDetailService {
             return ResponseUtil.build(AppConstant.ResponseCode.UNKNOWN_ERROR, null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    public ResponseEntity<Object> addNewDetail(DoctorDetailDTO request) {
+    public ResponseEntity<Object> addNewDetail(DoctorDetailDTO request, String username) {
         log.info("Executing add new doctor detail");
         try {
             Optional<Facility> facility = facilityRepository.findById(request.getFacility().getId());
@@ -70,6 +70,7 @@ public class DoctorDetailService {
             DoctorDetail doctorDetail = modelMapper.map(request, DoctorDetail.class);
             doctorDetail.setDoctor(doctor.get());
             doctorDetail.setFacility(facility.get());
+            doctorDetail.setCreatedBy(username);
             doctorDetailRepository.save(doctorDetail);
 
             log.info("Successfully added new Doctor detail");

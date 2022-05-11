@@ -56,7 +56,7 @@ public class FacilityService {
         }
     }
 
-    public ResponseEntity<Object> addNew(FacilityDTO request) {
+    public ResponseEntity<Object> addNew(FacilityDTO request, String username) {
         log.info("Executing add new facility");
         try {
             //Checking facility type and location exist or not on database
@@ -75,7 +75,7 @@ public class FacilityService {
             Facility facility = modelMapper.map(request, Facility.class);
             facility.setFacilityType(facilityType.get());
             facility.setLocation(location.get());
-
+            facility.setCreatedBy(username);
             facilityRepository.save(facility);
 
             log.info("Successfully added new Facility");
@@ -109,11 +109,13 @@ public class FacilityService {
             }
 
             optionalFacility.ifPresent(facility -> {
-                facility = modelMapper.map(request, Facility.class);
                 facility.setId(id);
+                facility.setName(request.getName());
+                facility.setMapUrl(request.getMapUrl());
+                facility.setWebsiteUrl(request.getWebsiteUrl());
+                facility.setAddress(request.getAddress());
                 facility.setLocation(location.get());
                 facility.setFacilityType(facilityType.get());
-//                facility.setIsDeleted(facility.getIsDeleted());
                 facilityRepository.save(facility);
             });
 

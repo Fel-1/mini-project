@@ -4,6 +4,7 @@ import com.alterra.miniproject.constant.AppConstant;
 import com.alterra.miniproject.domain.dao.*;
 import com.alterra.miniproject.domain.dto.DoctorDTO;
 import com.alterra.miniproject.domain.dto.DoctorDetailDTO;
+import com.alterra.miniproject.domain.dto.FacilityDTO;
 import com.alterra.miniproject.domain.dto.SingleDoctorRequest;
 import com.alterra.miniproject.repository.DoctorDetailRepository;
 import com.alterra.miniproject.repository.DoctorRepository;
@@ -75,7 +76,8 @@ public class DoctorService {
             List<DoctorDetailDTO> doctorDetailDTOS = new ArrayList<>();
             for (DoctorDetail detail:
                  doctorDetails) {
-                doctorDetailDTOS.add(modelMapper.map(detail, DoctorDetailDTO.class));
+                DoctorDetailDTO detailDTO = modelMapper.map(detail, DoctorDetailDTO.class);
+                doctorDetailDTOS.add(detailDTO);
             }
             doctorDTOS.setDetails(doctorDetailDTOS);
 
@@ -87,11 +89,11 @@ public class DoctorService {
         }
     }
 
-    public ResponseEntity<Object> addNew(DoctorDTO request) {
+    public ResponseEntity<Object> addNew(DoctorDTO request, String username) {
         log.info("Executing add new doctor");
         try {
             Doctor doctor = modelMapper.map(request, Doctor.class);
-            log.debug(doctor.toString());
+            doctor.setCreatedBy(username);
             doctorRepository.save(doctor);
 
             log.info("Successfully added new Doctor");
@@ -115,8 +117,12 @@ public class DoctorService {
             }
 
             optionalDoctor.ifPresent(doctor -> {
-                doctor = modelMapper.map(request, Doctor.class);
                 doctor.setId(id);
+                doctor.setName(request.getName());
+                doctor.setAge(request.getAge());
+                doctor.setGender(request.getGender());
+                doctor.setSpeciality(request.getSpeciality());
+                doctor.setExperience(request.getExperience());
                 doctorRepository.save(doctor);
             });
 

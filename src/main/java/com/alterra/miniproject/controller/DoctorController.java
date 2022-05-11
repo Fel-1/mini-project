@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/doctor")
 public class DoctorController {
@@ -15,10 +17,6 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-//    @GetMapping("")
-//    @SecurityRequirements
-//    public ResponseEntity<Object> getAllDoctor() {
-//    }
     @GetMapping("/")
     @SecurityRequirements
     public ResponseEntity<Object> getDoctorById(@RequestParam (value = "id", required = false) Long id) {
@@ -30,8 +28,12 @@ public class DoctorController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<Object> createNewDoctor(@RequestBody DoctorDTO request) {
-        return doctorService.addNew(request);
+    public ResponseEntity<Object> createNewDoctor(@RequestBody DoctorDTO request, Principal principal) {
+        if(principal!=null){
+            return doctorService.addNew(request, principal.getName());
+        }
+        return doctorService.addNew(request, null);
+
     }
 
     @PutMapping("/auth")
