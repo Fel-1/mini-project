@@ -2,7 +2,6 @@ package com.alterra.miniproject.controller;
 
 import com.alterra.miniproject.domain.dto.DoctorDTO;
 import com.alterra.miniproject.service.DoctorService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import org.springframework.beans.factory.annotation.Autowired;

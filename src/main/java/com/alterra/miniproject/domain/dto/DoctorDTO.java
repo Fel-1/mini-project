@@ -6,12 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DoctorDTO {
+
 
     private Long id;
 
@@ -24,5 +26,4 @@ public class DoctorDTO {
     private String speciality;
 
     private Integer experience;
-
 }

@@ -1,9 +1,13 @@
 package com.alterra.miniproject.service;
 
 import com.alterra.miniproject.constant.AppConstant;
-import com.alterra.miniproject.domain.dao.Doctor;
+import com.alterra.miniproject.domain.dao.*;
 import com.alterra.miniproject.domain.dto.DoctorDTO;
+import com.alterra.miniproject.domain.dto.DoctorDetailDTO;
+import com.alterra.miniproject.domain.dto.SingleDoctorRequest;
+import com.alterra.miniproject.repository.DoctorDetailRepository;
 import com.alterra.miniproject.repository.DoctorRepository;
+import com.alterra.miniproject.repository.FacilityRepository;
 import com.alterra.miniproject.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,6 +26,12 @@ public class DoctorService {
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private DoctorDetailRepository doctorDetailRepository;
+
+    @Autowired
+    private FacilityRepository facilityRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -44,6 +54,32 @@ public class DoctorService {
         }
     }
 
+    public ResponseEntity<Object> getById(Long id) {
+        log.info("Executing get doctor with ID [{}]", id);
+        try {
+            Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+            if(optionalDoctor.isEmpty()){
+                log.info("Doctor with ID [{}] not found ", id);
+                return ResponseUtil.build(AppConstant.ResponseCode.DATA_NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            SingleDoctorRequest doctorDTOS = modelMapper.map(optionalDoctor.get(), SingleDoctorRequest.class);
+
+            List<DoctorDetail> doctorDetails = doctorDetailRepository.findAllByDoctor_Id(id);
+            List<DoctorDetailDTO> doctorDetailDTOS = new ArrayList<>();
+            for (DoctorDetail detail:
+                 doctorDetails) {
+                doctorDetailDTOS.add(modelMapper.map(detail, DoctorDetailDTO.class));
+            }
+            doctorDTOS.setDetails(doctorDetailDTOS);
+
+            log.info("Successfully retrieved Doctor with ID");
+            return ResponseUtil.build(AppConstant.ResponseCode.SUCCESS, doctorDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("An error occurred while trying to get doctor with ID : [{}]. Error : {}", id ,e.getMessage());
+            return ResponseUtil.build(AppConstant.ResponseCode.UNKNOWN_ERROR, null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public ResponseEntity<Object> addNew(DoctorDTO request) {
         log.info("Executing add new doctor");
         try {
@@ -58,6 +94,8 @@ public class DoctorService {
             return ResponseUtil.build(AppConstant.ResponseCode.UNKNOWN_ERROR, null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     public ResponseEntity<Object> updateById(Long id, DoctorDTO request) {
         log.info("Executing update existing doctor");

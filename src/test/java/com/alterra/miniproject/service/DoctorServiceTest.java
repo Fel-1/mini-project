@@ -122,7 +122,7 @@ class DoctorServiceTest {
         when(modelMapper.map(any(),eq(DoctorDTO.class))).thenReturn(doctorDTO);
         when(doctorRepository.save(any())).thenReturn(doctor);
 
-        ResponseEntity responseEntity = doctorService.updateById(1L, doctorDTO);
+        ResponseEntity responseEntity = doctorService.updateById(1L,doctorDTO);
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -146,7 +146,7 @@ class DoctorServiceTest {
     void updateById_Error_Test() {
         when(doctorRepository.findById(anyLong())).thenThrow(NullPointerException.class);
 
-        ResponseEntity<Object> responseEntity = doctorService.updateById(1L,DoctorDTO
+        ResponseEntity<Object> responseEntity = doctorService.updateById(1L, DoctorDTO
                 .builder()
                 .id(1L)
                 .build());
