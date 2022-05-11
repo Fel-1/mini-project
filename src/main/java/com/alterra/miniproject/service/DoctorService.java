@@ -62,7 +62,14 @@ public class DoctorService {
                 log.info("Doctor with ID [{}] not found ", id);
                 return ResponseUtil.build(AppConstant.ResponseCode.DATA_NOT_FOUND, null, HttpStatus.BAD_REQUEST);
             }
-            SingleDoctorRequest doctorDTOS = modelMapper.map(optionalDoctor.get(), SingleDoctorRequest.class);
+            SingleDoctorRequest doctorDTOS = SingleDoctorRequest.builder()
+                    .id(optionalDoctor.get().getId())
+                    .name(optionalDoctor.get().getName())
+                    .age(optionalDoctor.get().getAge())
+                    .gender(optionalDoctor.get().getGender())
+                    .speciality(optionalDoctor.get().getSpeciality())
+                    .experience(optionalDoctor.get().getExperience())
+                    .build();
 
             List<DoctorDetail> doctorDetails = doctorDetailRepository.findAllByDoctor_Id(id);
             List<DoctorDetailDTO> doctorDetailDTOS = new ArrayList<>();

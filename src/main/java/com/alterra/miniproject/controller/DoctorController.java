@@ -15,10 +15,18 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-    @GetMapping("")
+//    @GetMapping("")
+//    @SecurityRequirements
+//    public ResponseEntity<Object> getAllDoctor() {
+//    }
+    @GetMapping("/")
     @SecurityRequirements
-    public ResponseEntity<Object> getAllDoctor() {
-        return doctorService.getAll();
+    public ResponseEntity<Object> getDoctorById(@RequestParam (value = "id", required = false) Long id) {
+        if(id == null){
+            return doctorService.getAll();
+        }else{
+            return doctorService.getById(id);
+        }
     }
 
     @PostMapping("/auth")
