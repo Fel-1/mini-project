@@ -1,6 +1,7 @@
 package com.alterra.miniproject.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,5 +22,7 @@ public class DoctorDetailDTO implements Serializable {
 
     private DoctorDTO doctor;
     private FacilityDTO facility;
+
+    @Schema(type = "Set<DayOfWeek>")
     private Set<DayOfWeek> workDays;
 }
