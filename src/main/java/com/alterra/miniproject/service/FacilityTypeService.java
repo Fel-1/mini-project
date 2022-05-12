@@ -44,11 +44,11 @@ public class FacilityTypeService {
         }
     }
 
-    public ResponseEntity<Object> addNew(FacilityTypeDTO request) {
+    public ResponseEntity<Object> addNew(FacilityTypeDTO request, String username) {
         log.info("Executing add new facility type");
         try {
             FacilityType facilityType = modelMapper.map(request, FacilityType.class);
-            log.debug(facilityType.toString());
+            facilityType.setCreatedBy(username);
             facilityTypeRepository.save(facilityType);
 
             log.info("Successfully added new Facility Type");
@@ -70,9 +70,8 @@ public class FacilityTypeService {
             }
 
             optionalFacilityType.ifPresent(facilityType -> {
-                facilityType = modelMapper.map(request, FacilityType.class);
                 facilityType.setId(id);
-//                facilityType.setIsDeleted(facilityType.getIsDeleted());
+                facilityType.setType(request.getType());
                 facilityTypeRepository.save(facilityType);
             });
 

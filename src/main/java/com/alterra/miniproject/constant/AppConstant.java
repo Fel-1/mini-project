@@ -4,7 +4,8 @@ public class AppConstant {
 
     private AppConstant() {}
 
-    public static enum ResponseCode {
+    public static final String DEFAULT_SYSTEM = "SYSTEM";
+    public enum ResponseCode {
 
         SUCCESS("SUCCESS", "Success!"),
         DATA_NOT_FOUND("DATA_NOT_FOUND", "Data not found!"),

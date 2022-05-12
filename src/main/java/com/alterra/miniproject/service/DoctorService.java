@@ -1,9 +1,14 @@
 package com.alterra.miniproject.service;
 
 import com.alterra.miniproject.constant.AppConstant;
-import com.alterra.miniproject.domain.dao.Doctor;
+import com.alterra.miniproject.domain.dao.*;
 import com.alterra.miniproject.domain.dto.DoctorDTO;
+import com.alterra.miniproject.domain.dto.DoctorDetailDTO;
+import com.alterra.miniproject.domain.dto.FacilityDTO;
+import com.alterra.miniproject.domain.dto.SingleDoctorRequest;
+import com.alterra.miniproject.repository.DoctorDetailRepository;
 import com.alterra.miniproject.repository.DoctorRepository;
+import com.alterra.miniproject.repository.FacilityRepository;
 import com.alterra.miniproject.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,6 +27,12 @@ public class DoctorService {
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private DoctorDetailRepository doctorDetailRepository;
+
+    @Autowired
+    private FacilityRepository facilityRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -44,11 +55,45 @@ public class DoctorService {
         }
     }
 
-    public ResponseEntity<Object> addNew(DoctorDTO request) {
+    public ResponseEntity<Object> getById(Long id) {
+        log.info("Executing get doctor with ID [{}]", id);
+        try {
+            Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+            if(optionalDoctor.isEmpty()){
+                log.info("Doctor with ID [{}] not found ", id);
+                return ResponseUtil.build(AppConstant.ResponseCode.DATA_NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            SingleDoctorRequest doctorDTOS = SingleDoctorRequest.builder()
+                    .id(optionalDoctor.get().getId())
+                    .name(optionalDoctor.get().getName())
+                    .age(optionalDoctor.get().getAge())
+                    .gender(optionalDoctor.get().getGender())
+                    .speciality(optionalDoctor.get().getSpeciality())
+                    .experience(optionalDoctor.get().getExperience())
+                    .build();
+
+            List<DoctorDetail> doctorDetails = doctorDetailRepository.findAllByDoctor_Id(id);
+            List<DoctorDetailDTO> doctorDetailDTOS = new ArrayList<>();
+            for (DoctorDetail detail:
+                 doctorDetails) {
+                DoctorDetailDTO detailDTO = modelMapper.map(detail, DoctorDetailDTO.class);
+                doctorDetailDTOS.add(detailDTO);
+            }
+            doctorDTOS.setDetails(doctorDetailDTOS);
+
+            log.info("Successfully retrieved Doctor with ID");
+            return ResponseUtil.build(AppConstant.ResponseCode.SUCCESS, doctorDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("An error occurred while trying to get doctor with ID : [{}]. Error : {}", id ,e.getMessage());
+            return ResponseUtil.build(AppConstant.ResponseCode.UNKNOWN_ERROR, null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<Object> addNew(DoctorDTO request, String username) {
         log.info("Executing add new doctor");
         try {
             Doctor doctor = modelMapper.map(request, Doctor.class);
-            log.debug(doctor.toString());
+            doctor.setCreatedBy(username);
             doctorRepository.save(doctor);
 
             log.info("Successfully added new Doctor");
@@ -58,6 +103,8 @@ public class DoctorService {
             return ResponseUtil.build(AppConstant.ResponseCode.UNKNOWN_ERROR, null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     public ResponseEntity<Object> updateById(Long id, DoctorDTO request) {
         log.info("Executing update existing doctor");
@@ -70,8 +117,12 @@ public class DoctorService {
             }
 
             optionalDoctor.ifPresent(doctor -> {
-                doctor = modelMapper.map(request, Doctor.class);
                 doctor.setId(id);
+                doctor.setName(request.getName());
+                doctor.setAge(request.getAge());
+                doctor.setGender(request.getGender());
+                doctor.setSpeciality(request.getSpeciality());
+                doctor.setExperience(request.getExperience());
                 doctorRepository.save(doctor);
             });
 

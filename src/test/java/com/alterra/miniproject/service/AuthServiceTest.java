@@ -71,7 +71,7 @@ class AuthServiceTest {
         when(userRepository.save(any())).thenReturn(user);
         when(modelMapper.map(any(),eq(UserDTO.class))).thenReturn(userDTO);
 
-        ResponseEntity responseEntity = authService.register(userPassword);
+        ResponseEntity responseEntity = authService.register(userPassword, null);
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -93,7 +93,7 @@ class AuthServiceTest {
         when(userRepository.save(any())).thenReturn(user);
         when(modelMapper.map(any(),eq(UserDTO.class))).thenReturn(userDTO);
 
-        ResponseEntity responseEntity = authService.register(userPassword);
+        ResponseEntity responseEntity = authService.register(userPassword, null);
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
         String code = ((ApiResponseStatus) apiResponse.getStatus()).getCode();
 

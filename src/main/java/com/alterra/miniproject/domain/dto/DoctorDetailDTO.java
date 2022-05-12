@@ -7,18 +7,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.time.DayOfWeek;
+import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FacilityTypeDTO {
+public class DoctorDetailDTO implements Serializable {
 
-    @Schema( type = "long", example = "1", description = "ID tipe fasilitas kesehatan")
-    private Long id;
+    private static final long serialVersionUID = -7188902159788748381L;
 
-    @Schema( type = "string", example = "Rumah Sakit", description = "Tipe fasilitas")
-    private String type;
+    private DoctorDTO doctor;
+    private FacilityDTO facility;
 
+    @Schema(type = "Set<DayOfWeek>")
+    private Set<DayOfWeek> workDays;
 }

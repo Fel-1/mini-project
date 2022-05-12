@@ -1,6 +1,7 @@
 package com.alterra.miniproject.domain.dao;
 
 import com.alterra.miniproject.domain.common.BaseDAO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -28,5 +30,9 @@ public class FacilityType extends BaseDAO {
 
     @Column(name = "type")
     private String type;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "facilityType")
+    private List<Facility> facilities;
 
 }

@@ -7,29 +7,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DoctorDTO {
+public class SingleDoctorRequest {
 
-    @Schema( type = "long", example = "1", description = "ID dokter")
     private Long id;
 
-    @Schema( type = "string", example = "Clark Kent", description = "Nama dokter")
     private String name;
 
-    @Schema( type = "int", example = "35", description = "Umur dokter")
     private Integer age;
 
-    @Schema( type = "character", example = "L", description = "Jenis kelamin dokter")
     private Character gender;
 
-    @Schema( type = "string", example = "Kulit", description = "Spesialitas dokter")
     private String speciality;
 
-    @Schema( type = "int", example = "3", description = "Pengalaman dokter dalam unit tahun")
     private Integer experience;
+
+    private List<DoctorDetailDTO> details;
+
 }

@@ -110,7 +110,7 @@ class FacilityServiceTest {
         when(modelMapper.map(any(),eq(FacilityDTO.class))).thenReturn(facilityDTO);
         when(facilityRepository.save(any())).thenReturn(facility);
 
-        ResponseEntity responseEntity = facilityService.addNew(facilityDTO);
+        ResponseEntity responseEntity = facilityService.addNew(facilityDTO, null);
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -127,7 +127,7 @@ class FacilityServiceTest {
                 .id(1L)
                 .location(LocationDTO.builder().id(1L).build())
                 .facilityType(FacilityTypeDTO.builder().id(1L).build())
-                .build());
+                .build(), null);
 
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
         assertEquals(AppConstant.ResponseCode.UNKNOWN_ERROR.getCode(), apiResponse.getStatus().getCode());
@@ -148,7 +148,7 @@ class FacilityServiceTest {
                 .id(1L)
                 .location(LocationDTO.builder().id(1L).build())
                 .facilityType(FacilityTypeDTO.builder().id(1L).build())
-                .build());
+                .build(), null);
 
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
         assertEquals(AppConstant.ResponseCode.DATA_NOT_FOUND.getCode(), apiResponse.getStatus().getCode());
@@ -163,7 +163,7 @@ class FacilityServiceTest {
                 .id(1L)
                 .location(LocationDTO.builder().id(1L).build())
                 .facilityType(FacilityTypeDTO.builder().id(1L).build())
-                .build());
+                .build(), null);
 
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
         assertEquals(AppConstant.ResponseCode.DATA_NOT_FOUND.getCode(), apiResponse.getStatus().getCode());
