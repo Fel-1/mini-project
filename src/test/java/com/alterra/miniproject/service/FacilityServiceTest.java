@@ -110,7 +110,7 @@ class FacilityServiceTest {
         when(modelMapper.map(any(),eq(FacilityDTO.class))).thenReturn(facilityDTO);
         when(facilityRepository.save(any())).thenReturn(facility);
 
-        ResponseEntity responseEntity = facilityService.addNew(facilityDTO, null);
+        ResponseEntity responseEntity = facilityService.addNew(1L, 1L, facilityDTO, null);
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -122,7 +122,7 @@ class FacilityServiceTest {
 
         when(facilityTypeRepository.findById(anyLong())).thenThrow(NullPointerException.class);
 
-        ResponseEntity<Object> responseEntity = facilityService.addNew(FacilityDTO
+        ResponseEntity<Object> responseEntity = facilityService.addNew(1L, 1L, FacilityDTO
                 .builder()
                 .id(1L)
                 .location(LocationDTO.builder().id(1L).build())
@@ -143,7 +143,7 @@ class FacilityServiceTest {
 
         when(locationRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        ResponseEntity<Object> responseEntity = facilityService.addNew(FacilityDTO
+        ResponseEntity<Object> responseEntity = facilityService.addNew(1L, 1L, FacilityDTO
                 .builder()
                 .id(1L)
                 .location(LocationDTO.builder().id(1L).build())
@@ -158,7 +158,7 @@ class FacilityServiceTest {
 
         when(facilityTypeRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        ResponseEntity<Object> responseEntity = facilityService.addNew(FacilityDTO
+        ResponseEntity<Object> responseEntity = facilityService.addNew(1L, 1L, FacilityDTO
                 .builder()
                 .id(1L)
                 .location(LocationDTO.builder().id(1L).build())

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DoctorDTO {
 
-    @Schema( type = "long", example = "1", description = "ID dokter")
+    @Schema( type = "long", example = "1", description = "ID dokter", hidden = true)
     private Long id;
 
     @Schema( type = "string", example = "Clark Kent", description = "Nama dokter")

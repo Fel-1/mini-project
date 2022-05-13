@@ -22,11 +22,25 @@ public class DoctorDetailController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<Object> createNewDoctor(@RequestBody DoctorDetailDTO request, Principal principal) {
+    public ResponseEntity<Object> createNewDoctorDetail(@RequestParam(value = "doctorId") Long doctorId,
+                                                  @RequestParam(value = "facilityId") Long facilityId,
+                                                  @RequestBody DoctorDetailDTO request, Principal principal) {
         if(principal!=null){
-            return doctorDetailService.addNewDetail(request, principal.getName());
+            return doctorDetailService.addNewDetail(doctorId, facilityId, request, principal.getName());
         }
-        return doctorDetailService.addNewDetail(request, null);
+        return doctorDetailService.addNewDetail(doctorId, facilityId, request, null);
+
+    }
+
+
+    @PutMapping("/auth")
+    public ResponseEntity<Object> updateDoctorDetail(@RequestParam(value = "doctorId") Long doctorId,
+                                                  @RequestParam(value = "facilityId") Long facilityId,
+                                                  @RequestBody DoctorDetailDTO request, Principal principal) {
+        if(principal!=null){
+            return doctorDetailService.updateWorkDays(doctorId, facilityId, request);
+        }
+        return doctorDetailService.updateWorkDays(doctorId, facilityId, request);
 
     }
 }

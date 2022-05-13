@@ -56,17 +56,17 @@ public class FacilityService {
         }
     }
 
-    public ResponseEntity<Object> addNew(FacilityDTO request, String username) {
+    public ResponseEntity<Object> addNew(Long facilityTypeId, Long locationId, FacilityDTO request, String username) {
         log.info("Executing add new facility");
         try {
             //Checking facility type and location exist or not on database
-            Optional<FacilityType> facilityType = facilityTypeRepository.findById(request.getFacilityType().getId());
+            Optional<FacilityType> facilityType = facilityTypeRepository.findById(facilityTypeId);
             if(facilityType.isEmpty()) {
                 log.info("Facility Type with ID [{}] not found ", request.getFacilityType().getId());
                 return ResponseUtil.build(ResponseCode.DATA_NOT_FOUND, null, HttpStatus.BAD_REQUEST);
             }
 
-            Optional<Location> location = locationRepository.findById(request.getLocation().getId());
+            Optional<Location> location = locationRepository.findById(locationId);
             if(location.isEmpty()) {
                 log.info("Location with ID : [{}] is not found", request.getLocation().getId());
                 return ResponseUtil.build(ResponseCode.DATA_NOT_FOUND, null, HttpStatus.BAD_REQUEST);
@@ -114,8 +114,6 @@ public class FacilityService {
                 facility.setMapUrl(request.getMapUrl());
                 facility.setWebsiteUrl(request.getWebsiteUrl());
                 facility.setAddress(request.getAddress());
-                facility.setLocation(location.get());
-                facility.setFacilityType(facilityType.get());
                 facilityRepository.save(facility);
             });
 

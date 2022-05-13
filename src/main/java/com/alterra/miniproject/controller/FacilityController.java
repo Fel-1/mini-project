@@ -23,11 +23,13 @@ public class FacilityController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<Object> createNewFacility(@RequestBody FacilityDTO request, Principal principal) {
+    public ResponseEntity<Object> createNewFacility(@RequestParam (value = "facilityTypeId") Long facilityTypeId,
+                                                    @RequestParam (value = "locationId") Long locationId,
+                                                    @RequestBody FacilityDTO request, Principal principal) {
         if(principal!=null){
-            return facilityService.addNew(request, principal.getName());
+            return facilityService.addNew(facilityTypeId, locationId, request, principal.getName());
         }
-        return facilityService.addNew(request, null);
+        return facilityService.addNew(facilityTypeId, locationId, request, null);
     }
 
     @PutMapping("/auth")

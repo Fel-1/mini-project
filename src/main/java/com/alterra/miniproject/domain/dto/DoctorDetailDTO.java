@@ -20,7 +20,10 @@ public class DoctorDetailDTO implements Serializable {
 
     private static final long serialVersionUID = -7188902159788748381L;
 
+    @Schema(type = "DoctorDTO", hidden = true)
     private DoctorDTO doctor;
+
+    @Schema(type = "FacilityDTO", hidden = true)
     private FacilityDTO facility;
 
     @Schema(type = "Set<DayOfWeek>")
