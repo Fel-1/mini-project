@@ -19,9 +19,8 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/register")
-    @SecurityRequirements
-    public ResponseEntity<Object> login(@RequestBody UserPassword userPassword, Principal principal) {
+    @PostMapping("/register/auth")
+    public ResponseEntity<Object> register(@RequestBody UserPassword userPassword, Principal principal) {
         if(principal!= null){
             return authService.register(userPassword, principal.getName());
         }

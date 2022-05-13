@@ -93,7 +93,7 @@ jobs:
           port: 22
           script: |
             docker stop mini-project mini-project-coverage
-            docker rmi felz28/mini-project:latest felz28/mini-project:latest
+            docker rmi felz28/mini-project:latest felz28/mini-project-coverage:latest
             docker pull felz28/mini-project:latest
             docker pull felz28/mini-project-coverage:latest
             docker run -d --rm --name mini-project-coverage -p 8000:80 felz28/mini-project-coverage:latest
