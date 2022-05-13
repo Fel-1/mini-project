@@ -3,7 +3,13 @@ package com.alterra.miniproject.service;
 import com.alterra.miniproject.constant.AppConstant;
 import com.alterra.miniproject.domain.common.ApiResponse;
 import com.alterra.miniproject.domain.dao.Doctor;
+import com.alterra.miniproject.domain.dao.DoctorDetail;
+import com.alterra.miniproject.domain.dao.Facility;
 import com.alterra.miniproject.domain.dto.DoctorDTO;
+import com.alterra.miniproject.domain.dto.DoctorDetailDTO;
+import com.alterra.miniproject.domain.dto.FacilityDTO;
+import com.alterra.miniproject.domain.dto.SingleDoctorRequest;
+import com.alterra.miniproject.repository.DoctorDetailRepository;
 import com.alterra.miniproject.repository.DoctorRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +37,8 @@ class DoctorServiceTest {
     @MockBean
     private DoctorRepository doctorRepository;
 
+    @MockBean
+    private DoctorDetailRepository doctorDetailRepository;
     @MockBean
     private ModelMapper modelMapper;
 
@@ -61,10 +69,62 @@ class DoctorServiceTest {
         assertEquals(1L, result.get(0).getId());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
+
+    @Test
+    void getById_Success_Test() {
+        List<DoctorDetail> doctorDetails = new ArrayList<>();
+
+        Doctor doctor = Doctor.builder()
+                .id(1L)
+                .build();
+        Facility facility = Facility.builder()
+                .id(1L)
+                .build();
+        DoctorDetail doctorDetail = DoctorDetail.builder()
+                        .doctor(doctor)
+                        .facility(facility)
+                        .build();
+        doctorDetails.add(doctorDetail);
+        DoctorDTO doctorDTO = DoctorDTO.builder()
+                .id(1L)
+                .build();
+        FacilityDTO facilityDTO = FacilityDTO.builder()
+                .id(1L)
+                .build();
+        DoctorDetailDTO doctorDetailDTO = DoctorDetailDTO.builder()
+                .doctor(doctorDTO)
+                .facility(facilityDTO)
+                .build();
+
+        when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
+        when(doctorDetailRepository.findAllByDoctor_Id(anyLong())).thenReturn(doctorDetails);
+        when(modelMapper.map(any(),eq(DoctorDetailDTO.class))).thenReturn(doctorDetailDTO);
+
+        ResponseEntity<Object> responseEntity = doctorService.getById(1L);
+        ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
+        SingleDoctorRequest result = ((SingleDoctorRequest) apiResponse.getData());
+
+        assertEquals(1L, result.getId());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+    @Test
+    void getById_DoctorEmpty_Test() {
+        when(doctorRepository.findById(anyLong())).thenReturn(Optional.empty());
+        ResponseEntity<Object> responseEntity = doctorService.getById(1L);
+        ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
+        assertEquals(AppConstant.ResponseCode.DATA_NOT_FOUND.getCode(), apiResponse.getStatus().getCode());
+    }
     @Test
     void getAll_Error_Test() {
         when(doctorRepository.findAll()).thenThrow(NullPointerException.class);
         ResponseEntity<Object> responseEntity = doctorService.getAll();
+        ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
+        assertEquals(AppConstant.ResponseCode.UNKNOWN_ERROR.getCode(), apiResponse.getStatus().getCode());
+    }
+    @Test
+    void getById_Error_Test() {
+        when(doctorRepository.findById(anyLong())).thenThrow(NullPointerException.class);
+        ResponseEntity<Object> responseEntity = doctorService.getById(1L);
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
         assertEquals(AppConstant.ResponseCode.UNKNOWN_ERROR.getCode(), apiResponse.getStatus().getCode());
     }

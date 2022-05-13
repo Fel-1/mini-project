@@ -31,8 +31,6 @@ public class DoctorService {
     @Autowired
     private DoctorDetailRepository doctorDetailRepository;
 
-    @Autowired
-    private FacilityRepository facilityRepository;
 
     @Autowired
     private ModelMapper modelMapper;

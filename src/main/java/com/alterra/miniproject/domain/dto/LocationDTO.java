@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LocationDTO {
 
-    @Schema( type = "long", example = "1", description = "ID lokasi")
+    @Schema( type = "long", example = "1", description = "ID lokasi", hidden = true)
     private Long id;
 
     @Schema( type = "string", example = "Pancoran Mas", description = "Nama kelurahan")
