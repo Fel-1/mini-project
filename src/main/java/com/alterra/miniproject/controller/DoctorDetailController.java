@@ -36,11 +36,14 @@ public class DoctorDetailController {
     @PutMapping("/auth")
     public ResponseEntity<Object> updateDoctorDetail(@RequestParam(value = "doctorId") Long doctorId,
                                                   @RequestParam(value = "facilityId") Long facilityId,
-                                                  @RequestBody DoctorDetailDTO request, Principal principal) {
-        if(principal!=null){
-            return doctorDetailService.updateWorkDays(doctorId, facilityId, request);
-        }
+                                                  @RequestBody DoctorDetailDTO request) {
         return doctorDetailService.updateWorkDays(doctorId, facilityId, request);
+
+    }
+    @DeleteMapping("/auth")
+    public ResponseEntity<Object> deleteDoctorDetail(@RequestParam(value = "doctorId") Long doctorId,
+                                                     @RequestParam(value = "facilityId") Long facilityId) {
+        return doctorDetailService.deleteDoctorDetail(doctorId, facilityId);
 
     }
 }

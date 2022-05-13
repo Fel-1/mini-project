@@ -28,7 +28,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = DoctorDetailService.class)
@@ -207,9 +208,6 @@ class DoctorDetailServiceTest {
 
     @Test
     void updateWorkDays_DoctorDetailEmpty_Test() {
-        Facility facility = Facility.builder()
-                .id(1L)
-                .build();
         DoctorDTO doctorDTO = DoctorDTO.builder()
                 .id(1L)
                 .build();
@@ -233,6 +231,42 @@ class DoctorDetailServiceTest {
         when(doctorDetailRepository.findByDoctor_IdAndFacility_Id(anyLong(), anyLong())).thenThrow(NullPointerException.class);
         ResponseEntity<Object> responseEntity = doctorDetailService
                 .updateWorkDays(1L, 1L, doctorDetailDTO);
+        ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
+        assertEquals(AppConstant.ResponseCode.UNKNOWN_ERROR.getCode(), apiResponse.getStatus().getCode());
+    }
+    @Test
+    void deleteDoctorDetail_Success_Test() {
+        when(doctorDetailRepository.findByDoctor_IdAndFacility_Id(anyLong(), anyLong()))
+                .thenReturn(Optional.of(DoctorDetail
+                    .builder()
+                    .build()));
+
+        doNothing().when(doctorDetailRepository).delete(any());
+
+        ResponseEntity<Object> responseEntity = doctorDetailService.deleteDoctorDetail(1L, 1L);
+        verify(doctorDetailRepository, times(1)).delete(any());
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+    }
+    @Test
+    void deleteById_DoctorEmpty_Test() {
+
+        when(doctorDetailRepository.findByDoctor_IdAndFacility_Id(anyLong(), anyLong()))
+                .thenReturn(Optional.empty());
+
+        ResponseEntity<Object> responseEntity = doctorDetailService.deleteDoctorDetail(1L, 1L);
+
+        ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
+        assertEquals(AppConstant.ResponseCode.DATA_NOT_FOUND.getCode(), apiResponse.getStatus().getCode());
+    }
+
+    @Test
+    void deleteById_Error_Test() {
+        when(doctorDetailRepository.findByDoctor_IdAndFacility_Id(anyLong(), anyLong()))
+                .thenThrow(NullPointerException.class);
+        ResponseEntity<Object> responseEntity = doctorDetailService.deleteDoctorDetail(1L,1L);
+
         ApiResponse apiResponse = ((ApiResponse) responseEntity.getBody());
         assertEquals(AppConstant.ResponseCode.UNKNOWN_ERROR.getCode(), apiResponse.getStatus().getCode());
     }

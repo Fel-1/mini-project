@@ -21,7 +21,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "M_DOCTOR_DETAIL")
-@SQLDelete(sql = "UPDATE M_DOCTOR_DETAIL SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE M_DOCTOR_DETAIL SET is_deleted = true WHERE doctor_id = ? and facility_id = ?")
 @Where(clause = "is_deleted = false")
 @IdClass(DoctorDetail.DoctorDetailId.class)
 public class DoctorDetail extends BaseDAO {

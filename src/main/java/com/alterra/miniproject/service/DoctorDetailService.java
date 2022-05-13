@@ -109,4 +109,21 @@ public class DoctorDetailService {
         }
     }
 
+    public ResponseEntity<Object> deleteDoctorDetail(Long doctorId, Long facilityId) {
+        log.info("Executing delete doctor detail");
+        try {
+            Optional<DoctorDetail> optionalDoctorDetail = doctorDetailRepository.findByDoctor_IdAndFacility_Id(doctorId, facilityId);
+            if (optionalDoctorDetail.isEmpty()) {
+                log.info("Doctor Detail with Doctor ID : [{}] and Facility ID : [{}] is not found", doctorId, facilityId);
+                return ResponseUtil.build(AppConstant.ResponseCode.DATA_NOT_FOUND, null, HttpStatus.BAD_REQUEST);
+            }
+            doctorDetailRepository.delete(optionalDoctorDetail.get());
+            log.info("Successfully deleted Doctor Detail with Doctor ID : [{}] and Facility ID : [{}]", doctorId, facilityId);
+            return ResponseUtil.build(AppConstant.ResponseCode.SUCCESS, null, HttpStatus.OK);
+        } catch (Exception e) {
+            log.info("An error occurred while trying to delete existing doctor detail. Error : {}", e.getMessage());
+            return ResponseUtil.build(AppConstant.ResponseCode.UNKNOWN_ERROR, null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
